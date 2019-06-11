@@ -181,7 +181,8 @@ bool PathFinder::isPossibleToFindPath(const std::vector<std::vector<uint8_t>> &b
             queue.emplace(current.first + 1, current.second);
         }
         //Checkout 8
-        if (current.first < height_ - 1 && current.second < width_ - 1 && bitmap[current.first + 1][current.second + 1] &&
+        if (current.first < height_ - 1 && current.second < width_ - 1 &&
+            bitmap[current.first + 1][current.second + 1] &&
             !visited_[current.first + 1][current.second + 1]) {
             queue.emplace(current.first + 1, current.second + 1);
         }
@@ -241,7 +242,8 @@ bool PathFinder::checkCloseLeftDown(const std::pair<std::size_t, std::size_t> &p
 bool PathFinder::checkCloseRightDown(const std::pair<std::size_t, std::size_t> &position,
                                      const std::vector<std::vector<uint8_t >> &bitmap, uint8_t visitationStatus) {
     if ((position.first < height_) && (position.second < width_)) {
-        if (bitmap[position.first][position.second] && (visited_[position.first][position.second] == visitationStatus)) {
+        if (bitmap[position.first][position.second] &&
+            (visited_[position.first][position.second] == visitationStatus)) {
             visited_[position.first][position.second] = (visitationStatus == 0) ? 1 : 3; //  /
             path_.emplace_back(position.first, position.second + 1); //move right
             path_.emplace_back(position.first + 1, position.second); //move diagonal left
@@ -274,11 +276,12 @@ bool PathFinder::checkFarRightUp(const std::pair<std::size_t, std::size_t> &posi
                                  const std::vector<std::vector<uint8_t >> &bitmap, uint8_t visitationStatus) {
 
     if (position.first > 0 && position.second < width_ - 1) {
-        if (!(bitmap[position.first - 1][position.second] || //check on the right neighbours
-              (position.first < height_ ? bitmap[position.first][position.second]
-                                        : false))) {
+        ///some tricky idea, if we want to move to new cell we should on neighbours between
+        if (!(bitmap[position.first - 1][position.second] ||
+              (position.first < height_ ? bitmap[position.first][position.second] : false))) {
             return false;
         }
+        ///
         if (bitmap[position.first - 1][position.second + 1] &&
             (visited_[position.first - 1][position.second + 1] == visitationStatus)) {
             visited_[position.first - 1][position.second + 1] = visitationStatus == 0 ? 1 : 3; // /
