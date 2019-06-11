@@ -21,6 +21,7 @@
 class MainWidget : public QWidget {
 Q_OBJECT
 public:
+
     MainWidget();
 
     QSize sizeHint() const override;
@@ -35,8 +36,8 @@ private slots:
 
     void renderUntilSelectedElement();
 
-
 private:
+
     std::unique_ptr<RenderArea> renderArea_;
     std::unique_ptr<QPushButton> calculateButton_;
     std::unique_ptr<QPushButton> resetButton_;

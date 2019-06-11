@@ -15,10 +15,12 @@
 class PathFinder {
 
 public:
+
     std::optional<std::vector<std::pair<std::size_t, std::size_t>>>
     operator()(const std::vector<std::vector<uint8_t >> &bitmap);
 
 private:
+
     //simple bfs to check, if there are more that one component
     bool isOneComponent(const std::vector<std::vector<uint8_t>> &bitmap);
 

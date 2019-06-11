@@ -16,6 +16,7 @@ class RenderArea : public QWidget {
 Q_OBJECT
 
 public:
+
     explicit RenderArea(QWidget *parent = nullptr, size_t size = 10);
 
     ~RenderArea() override = default;
@@ -43,6 +44,7 @@ public:
     void renderPathUntil(size_t index);
 
 protected:
+
     void paintEvent(QPaintEvent *) override;
 
     void mousePressEvent(QMouseEvent *event) override;

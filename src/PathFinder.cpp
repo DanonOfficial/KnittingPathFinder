@@ -25,8 +25,6 @@ PathFinder::operator()(const std::vector<std::vector<uint8_t >> &bitmap) {
         }
 
         visited_ = bitmap;
-        width_ = bitmap[0].size();
-        height_ = bitmap.size();
         for (auto &i: visited_) {
             for (auto &j: i) {
                 j = 0;
@@ -77,7 +75,7 @@ PathFinder::operator()(const std::vector<std::vector<uint8_t >> &bitmap) {
                 auto diff = std::make_pair<int, int>(position.first - depthPath.top().first,
                                                      position.second - depthPath.top().second);
                 depthPath.pop();
-                if (diff.first == 0 && diff.second == 0) {
+                if (diff.second == 0 && diff.first == 0) {
                     checkCloseRightDown(position, bitmap, 2);
                     continue;
                 }
@@ -146,42 +144,42 @@ bool PathFinder::isOneComponent(const std::vector<std::vector<uint8_t>> &bitmap)
         // 4 c 5
         // 6 7 8
         //Checkout 1
-        if (current.first > 0 && current.second > 0 && bitmap[current.first - 1][current.second - 1] &&
+        if ((current.first > 0) && (current.second > 0) && bitmap[current.first - 1][current.second - 1] &&
             !visited_[current.first - 1][current.second - 1]) {
             queue.emplace(current.first - 1, current.second - 1);
         }
         //Checkout 2
-        if (current.first > 0 && bitmap[current.first - 1][current.second] &&
+        if ((current.first > 0) && bitmap[current.first - 1][current.second] &&
             !visited_[current.first - 1][current.second]) {
             queue.emplace(current.first - 1, current.second);
         }
         //Checkout 3
-        if (current.first > 0 && current.second < width_ - 1 && bitmap[current.first - 1][current.second + 1] &&
+        if ((current.first > 0) && (current.second < (width_ - 1)) && bitmap[current.first - 1][current.second + 1] &&
             !visited_[current.first - 1][current.second + 1]) {
             queue.emplace(current.first - 1, current.second + 1);
         }
         //Checkout 4
-        if (current.second > 0 && bitmap[current.first][current.second - 1] &&
+        if ((current.second > 0) && bitmap[current.first][current.second - 1] &&
             !visited_[current.first][current.second - 1]) {
             queue.emplace(current.first, current.second - 1);
         }
         //Checkout 5
-        if (current.second < width_ && bitmap[current.first][current.second + 1] &&
+        if ((current.second < width_) && bitmap[current.first][current.second + 1] &&
             !visited_[current.first][current.second + 1]) {
             queue.emplace(current.first, current.second + 1);
         }
         //Checkout 6
-        if (current.first < height_ - 1 && current.second > 0 && bitmap[current.first + 1][current.second - 1] &&
+        if ((current.first < (height_ - 1)) && (current.second > 0) && bitmap[current.first + 1][current.second - 1] &&
             !visited_[current.first + 1][current.second - 1]) {
             queue.emplace(current.first + 1, current.second - 1);
         }
         //Checkout 7
-        if (current.first < height_ - 1 && bitmap[current.first + 1][current.second] &&
+        if ((current.first < (height_ - 1)) && bitmap[current.first + 1][current.second] &&
             !visited_[current.first + 1][current.second]) {
             queue.emplace(current.first + 1, current.second);
         }
         //Checkout 8
-        if (current.first < height_ - 1 && current.second < width_ - 1 &&
+        if ((current.first < (height_ - 1)) && (current.second < (width_ - 1)) &&
             bitmap[current.first + 1][current.second + 1] &&
             !visited_[current.first + 1][current.second + 1]) {
             queue.emplace(current.first + 1, current.second + 1);
@@ -202,7 +200,7 @@ bool PathFinder::checkCloseLeftUp(const std::pair<std::size_t, std::size_t> &pos
     if ((position.second > 0) && (position.first > 0)) {
         if (bitmap[position.first - 1][position.second - 1] &&
             (visited_[position.first - 1][position.second - 1] == visitationStatus)) {
-            visited_[position.first - 1][position.second - 1] = visitationStatus == 0 ? 1 : 3; //
+            visited_[position.first - 1][position.second - 1] = (visitationStatus == 0) ? 1 : 3; //
             path_.emplace_back(position.first, position.second - 1);
             path_.emplace_back(position.first - 1, position.second);
             return true;
@@ -216,7 +214,7 @@ bool PathFinder::checkCloseRightUp(const std::pair<std::size_t, std::size_t> &po
     if ((position.first > 0) && (position.second < width_)) {
         if (bitmap[position.first - 1][position.second] &&
             (visited_[position.first - 1][position.second] == visitationStatus)) {
-            visited_[position.first - 1][position.second] = visitationStatus == 0 ? 2 : 3; //
+            visited_[position.first - 1][position.second] = (visitationStatus == 0) ? 2 : 3; //
             path_.emplace_back(position.first, position.second + 1);
             path_.emplace_back(position.first - 1, position.second);
             return true;
@@ -227,10 +225,10 @@ bool PathFinder::checkCloseRightUp(const std::pair<std::size_t, std::size_t> &po
 
 bool PathFinder::checkCloseLeftDown(const std::pair<std::size_t, std::size_t> &position,
                                     const std::vector<std::vector<uint8_t >> &bitmap, uint8_t visitationStatus) {
-    if (position.first < height_ && position.second > 0) {
+    if ((position.first < height_) && (position.second > 0)) {
         if (bitmap[position.first][position.second - 1] &&
             (visited_[position.first][position.second - 1] == visitationStatus)) {
-            visited_[position.first][position.second - 1] = visitationStatus == 0 ? 2 : 3; //
+            visited_[position.first][position.second - 1] = (visitationStatus == 0) ? 2 : 3; //
             path_.emplace_back(position.first, position.second - 1); //move right
             path_.emplace_back(position.first + 1, position.second); //move diagonal left
             return true;
@@ -255,15 +253,15 @@ bool PathFinder::checkCloseRightDown(const std::pair<std::size_t, std::size_t> &
 
 bool PathFinder::checkFarLeftUp(const std::pair<std::size_t, std::size_t> &position,
                                 const std::vector<std::vector<uint8_t >> &bitmap, uint8_t visitationStatus) {
-    if (position.first > 0 && position.second >= 2) {
-        ///some tricky idea, if we want to move to new cell we should on neighbours between
+    if ((position.first > 0) && (position.second >= 2)) {
+        ///some tricky idea, if we want to move to new cell we should on neighbours between, otherwise that's deadend
         if (!(bitmap[position.first - 1][position.second - 1] || bitmap[position.first][position.second - 1])) {
             return false;
         }
         ///
         if (bitmap[position.first - 1][position.second - 2] &&
             (visited_[position.first - 1][position.second - 2] == visitationStatus)) {
-            visited_[position.first - 1][position.second - 2] = visitationStatus == 0 ? 2 : 3;
+            visited_[position.first - 1][position.second - 2] = (visitationStatus == 0) ? 2 : 3;
             path_.emplace_back(position.first, position.second - 1);
             path_.emplace_back(position.first - 1, position.second - 2);
             return true;
@@ -275,16 +273,16 @@ bool PathFinder::checkFarLeftUp(const std::pair<std::size_t, std::size_t> &posit
 bool PathFinder::checkFarRightUp(const std::pair<std::size_t, std::size_t> &position,
                                  const std::vector<std::vector<uint8_t >> &bitmap, uint8_t visitationStatus) {
 
-    if (position.first > 0 && position.second < width_ - 1) {
+    if ((position.first > 0) && (position.second < width_ - 1)) {
         ///some tricky idea, if we want to move to new cell we should on neighbours between
         if (!(bitmap[position.first - 1][position.second] ||
-              (position.first < height_ ? bitmap[position.first][position.second] : false))) {
+              ((position.first < height_) ? bitmap[position.first][position.second] : false))) {
             return false;
         }
         ///
         if (bitmap[position.first - 1][position.second + 1] &&
             (visited_[position.first - 1][position.second + 1] == visitationStatus)) {
-            visited_[position.first - 1][position.second + 1] = visitationStatus == 0 ? 1 : 3; // /
+            visited_[position.first - 1][position.second + 1] = (visitationStatus == 0) ? 1 : 3; // /
             path_.emplace_back(position.first, position.second + 1);
             path_.emplace_back(position.first - 1, position.second + 2);
             return true;
@@ -297,16 +295,16 @@ bool PathFinder::checkFarRightUp(const std::pair<std::size_t, std::size_t> &posi
 
 bool PathFinder::checkFarLeftDown(const std::pair<std::size_t, std::size_t> &position,
                                   const std::vector<std::vector<uint8_t >> &bitmap, uint8_t visitationStatus) {
-    if (position.first < height_ && position.second >= 2) {
+    if ((position.first < height_) && (position.second >= 2)) {
         ///some tricky idea, if we want to move to new cell we should on neighbours between
-        if (!((position.first > 0 ? (bitmap[position.first - 1][position.second - 1]) : false) ||
+        if (!(((position.first > 0) ? (bitmap[position.first - 1][position.second - 1]) : false) ||
               bitmap[position.first][position.second - 1])) {
             return false;
         }
         ///
         if (bitmap[position.first][position.second - 2] &&
             (visited_[position.first][position.second - 2] == visitationStatus)) {
-            visited_[position.first][position.second - 2] = visitationStatus == 0 ? 1 : 3;
+            visited_[position.first][position.second - 2] = (visitationStatus == 0) ? 1 : 3;
             path_.emplace_back(position.first, position.second - 1);
             path_.emplace_back(position.first + 1, position.second - 2);
             return true;
@@ -317,16 +315,16 @@ bool PathFinder::checkFarLeftDown(const std::pair<std::size_t, std::size_t> &pos
 
 bool PathFinder::checkFarRightDown(const std::pair<std::size_t, std::size_t> &position,
                                    const std::vector<std::vector<uint8_t >> &bitmap, uint8_t visitationStatus) {
-    if (position.first < height_ && position.second < (width_ - 1)) {
+    if ((position.first < height_) && (position.second < (width_ - 1))) {
         ///some tricky idea, if we want to move to new cell we should on neighbours between
-        if (!((position.first > 0 ? bitmap[position.first - 1][position.second] : false) ||
+        if (!(((position.first > 0) ? bitmap[position.first - 1][position.second] : false) ||
               bitmap[position.first][position.second])) {
             return false;
         }
         ///
         if (bitmap[position.first][position.second + 1] &&
             (visited_[position.first][position.second + 1] == visitationStatus)) {
-            visited_[position.first][position.second + 1] = visitationStatus == 0 ? 2 : 3; //
+            visited_[position.first][position.second + 1] = (visitationStatus == 0) ? 2 : 3; //
             path_.emplace_back(position.first, position.second + 1);
             path_.emplace_back(position.first + 1, position.second + 2);
             return true;
