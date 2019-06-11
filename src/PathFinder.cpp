@@ -11,7 +11,7 @@ PathFinder::operator()(const std::vector<std::vector<uint8_t >> &bitmap) {
     }
     height_ = bitmap.size();
     width_ = bitmap[0].size();
-    if (isPossibleToFindPath(bitmap)) {
+    if (isOneComponent(bitmap)) {
         for (size_t i = 0; i < bitmap.size(); i++) {
             for (size_t j = 0; j < bitmap[i].size(); j++) {
                 if (bitmap[i][j]) {
@@ -117,15 +117,16 @@ PathFinder::operator()(const std::vector<std::vector<uint8_t >> &bitmap) {
     return std::nullopt;
 }
 
-bool PathFinder::isPossibleToFindPath(const std::vector<std::vector<uint8_t>> &bitmap) {
+bool PathFinder::isOneComponent(const std::vector<std::vector<uint8_t>> &bitmap) {
     visited_ = std::vector<std::vector<uint8_t>>(height_, std::vector<uint8_t>(width_, 0));
-    bool result = true;
+    bool result = false;
     std::queue<std::pair<std::size_t, std::size_t>> queue;
     //check for move for all directions
     for (size_t i = 0; i < height_; i++) {
         for (size_t j = 0; j < width_; j++) {
             if (bitmap[i][j] != 0) {
                 queue.emplace(i, j);
+                result = true;
                 break;
             }
         }
@@ -133,7 +134,6 @@ bool PathFinder::isPossibleToFindPath(const std::vector<std::vector<uint8_t>> &b
             break;
         }
     }
-    std::cout << queue.size() << std::endl;
     while (!queue.empty()) {
         std::pair<std::size_t, std::size_t> current = queue.front();
         queue.pop();

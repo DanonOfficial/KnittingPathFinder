@@ -5,7 +5,6 @@
 #ifndef KNITTINGPATHFINDER_RENDERAREA_HPP
 #define KNITTINGPATHFINDER_RENDERAREA_HPP
 
-#include <iostream>
 #include <vector>
 #include <variant>
 #include <QWidget>

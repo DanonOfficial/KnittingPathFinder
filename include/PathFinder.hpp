@@ -10,7 +10,6 @@
 #include <optional>
 #include <cstdint>
 #include <queue>
-#include <iostream>
 #include <stack>
 
 class PathFinder {
@@ -21,7 +20,7 @@ public:
 
 private:
     //simple bfs to check, if there are more that one component
-    bool isPossibleToFindPath(const std::vector<std::vector<uint8_t>> &bitmap);
+    bool isOneComponent(const std::vector<std::vector<uint8_t>> &bitmap);
 
     bool checkCloseLeftUp(const std::pair<std::size_t, std::size_t> &position,
                           const std::vector<std::vector<uint8_t >> &bitmap, uint8_t visitationStatus);
