@@ -12,7 +12,7 @@ RenderArea::RenderArea(QWidget *parent, size_t size) :
     scale_ = std::min(this->width(), this->height()) / height_;
 }
 
-void RenderArea::paintEvent(QPaintEvent *) const {
+void RenderArea::paintEvent(QPaintEvent *) {
     scale_ = std::min(this->width(), this->height()) / height_;
     QPainter painter(this);
     QPen pen;  // creates a default pen
