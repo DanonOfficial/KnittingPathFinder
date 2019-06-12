@@ -48,6 +48,8 @@ private:
     bool checkFarRightDown(const std::pair<std::size_t, std::size_t> &position,
                            const std::vector<std::vector<uint8_t >> &bitmap, uint8_t visitationStatus);
 
+    bool isFullyCovered(const std::vector<std::vector<uint8_t>> &bitmap) const;
+
     //Visited mostly used to check how we crossed cell: if 0 then not crossed, if 1 then /, else if 2 then \, otherwise 3
     //Its actually binary codes systme for every situation: 00, 01, 10, 11
     std::vector<std::vector<uint8_t >> visited_;

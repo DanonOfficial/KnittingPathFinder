@@ -11,108 +11,111 @@ PathFinder::operator()(const std::vector<std::vector<uint8_t >> &bitmap) {
     }
     height_ = bitmap.size();
     width_ = bitmap[0].size();
-    if (isOneComponent(bitmap)) {
-        for (size_t i = 0; i < bitmap.size(); i++) {
-            for (size_t j = 0; j < bitmap[i].size(); j++) {
-                if (bitmap[i][j]) {
-                    path_ = {{i, j}};
-                    break;
-                }
-            }
-            if (!path_.empty()) {
+
+    for (size_t i = 0; i < bitmap.size(); i++) {
+        for (size_t j = 0; j < bitmap[i].size(); j++) {
+            if (bitmap[i][j]) {
+                path_ = {{i, j}};
                 break;
             }
         }
-
-        visited_ = bitmap;
-        for (auto &i: visited_) {
-            for (auto &j: i) {
-                j = 0;
-            }
+        if (!path_.empty()) {
+            break;
         }
-        std::stack<std::pair<size_t, size_t>> depthPath;
-        while (visited_[path_[0].first][path_[0].second] != 3) {
-            auto position = path_.back();
-
-            ///Trying to find new cell, that not visited
-            if (checkCloseLeftDown(position, bitmap, 0)) {
-                depthPath.emplace(position.first, position.second - 1);
-                continue;
-            }
-            if (checkFarLeftDown(position, bitmap, 0)) {
-                depthPath.emplace(position.first, position.second - 2);
-                continue;
-            }
-            if (checkCloseLeftUp(position, bitmap, 0)) {
-                depthPath.emplace(position.first - 1, position.second - 1);
-                continue;
-            }
-            if (checkFarLeftUp(position, bitmap, 0)) {
-                depthPath.emplace(position.first - 1, position.second - 2);
-                continue;
-            }
-            if (checkCloseRightDown(position, bitmap, 0)) {
-                depthPath.emplace(position.first, position.second);
-                continue;
-            }
-            if (checkFarRightDown(position, bitmap, 0)) {
-                depthPath.emplace(position.first, position.second + 1);
-                continue;
-            }
-
-            if (checkCloseRightUp(position, bitmap, 0)) {
-                depthPath.emplace(position.first - 1, position.second);
-                continue;
-            }
-
-            if (checkFarRightUp(position, bitmap, 0)) {
-                depthPath.emplace(position.first - 1, position.second + 1);
-                continue;
-            }
-            ///
-            ///If there are no such cells, then
-            if (!depthPath.empty()) {
-                auto diff = std::make_pair<int, int>(position.first - depthPath.top().first,
-                                                     position.second - depthPath.top().second);
-                depthPath.pop();
-                if (diff.second == 0 && diff.first == 0) {
-                    checkCloseRightDown(position, bitmap, 2);
-                    continue;
-                }
-                if (diff.first == 1 && diff.second == 0) {
-                    checkCloseRightUp(position, bitmap, 1);
-                    continue;
-                }
-                if (diff.first == 0 && diff.second == 1) {
-                    checkCloseLeftDown(position, bitmap, 1);
-                    continue;
-                }
-                if (diff.first == 1 && diff.second == 1) {
-                    checkCloseLeftUp(position, bitmap, 2);
-                    continue;
-                }
-                if (diff.first == 0 && diff.second == -1) {
-                    checkFarRightDown(position, bitmap, 1);
-                    continue;
-                }
-                if (diff.first == 1 && diff.second == -1) {
-                    checkFarRightUp(position, bitmap, 2);
-                    continue;
-                }
-                if (diff.first == 0 && diff.second == 2) {
-                    checkFarLeftDown(position, bitmap, 2);
-                    continue;
-                }
-                if (diff.first == 1 && diff.second == 2) {
-                    checkFarLeftUp(position, bitmap, 1);
-                    continue;
-                }
-            }
-            return std::nullopt;
-        }
-        return path_;
     }
-    return std::nullopt;
+
+    visited_ = bitmap;
+    for (auto &i: visited_) {
+        for (auto &j: i) {
+            j = 0;
+        }
+    }
+    std::stack<std::pair<size_t, size_t>> depthPath;
+    while (visited_[path_[0].first][path_[0].second] != 3) {
+        auto position = path_.back();
+
+        ///Trying to find new cell, that not visited
+        if (checkCloseLeftDown(position, bitmap, 0)) {
+            depthPath.emplace(position.first, position.second - 1);
+            continue;
+        }
+        if (checkFarLeftDown(position, bitmap, 0)) {
+            depthPath.emplace(position.first, position.second - 2);
+            continue;
+        }
+        if (checkCloseLeftUp(position, bitmap, 0)) {
+            depthPath.emplace(position.first - 1, position.second - 1);
+            continue;
+        }
+        if (checkFarLeftUp(position, bitmap, 0)) {
+            depthPath.emplace(position.first - 1, position.second - 2);
+            continue;
+        }
+        if (checkCloseRightDown(position, bitmap, 0)) {
+            depthPath.emplace(position.first, position.second);
+            continue;
+        }
+        if (checkFarRightDown(position, bitmap, 0)) {
+            depthPath.emplace(position.first, position.second + 1);
+            continue;
+        }
+
+        if (checkCloseRightUp(position, bitmap, 0)) {
+            depthPath.emplace(position.first - 1, position.second);
+            continue;
+        }
+
+        if (checkFarRightUp(position, bitmap, 0)) {
+            depthPath.emplace(position.first - 1, position.second + 1);
+            continue;
+        }
+        ///
+        ///If there are no such cells, then
+        if (!depthPath.empty()) {
+            auto diff = std::make_pair<int, int>(position.first - depthPath.top().first,
+                                                 position.second - depthPath.top().second);
+            depthPath.pop();
+            if (diff.second == 0 && diff.first == 0) {
+                checkCloseRightDown(position, bitmap, 2);
+                continue;
+            }
+            if (diff.first == 1 && diff.second == 0) {
+                checkCloseRightUp(position, bitmap, 1);
+                continue;
+            }
+            if (diff.first == 0 && diff.second == 1) {
+                checkCloseLeftDown(position, bitmap, 1);
+                continue;
+            }
+            if (diff.first == 1 && diff.second == 1) {
+                checkCloseLeftUp(position, bitmap, 2);
+                continue;
+            }
+            if (diff.first == 0 && diff.second == -1) {
+                checkFarRightDown(position, bitmap, 1);
+                continue;
+            }
+            if (diff.first == 1 && diff.second == -1) {
+                checkFarRightUp(position, bitmap, 2);
+                continue;
+            }
+            if (diff.first == 0 && diff.second == 2) {
+                checkFarLeftDown(position, bitmap, 2);
+                continue;
+            }
+            if (diff.first == 1 && diff.second == 2) {
+                checkFarLeftUp(position, bitmap, 1);
+                continue;
+            }
+        }
+        return std::nullopt;
+    }
+    if (!isFullyCovered(bitmap)) {
+        return std::nullopt;
+    }
+    return path_;
+
+
 }
 
 bool PathFinder::isOneComponent(const std::vector<std::vector<uint8_t>> &bitmap) {
@@ -331,4 +334,15 @@ bool PathFinder::checkFarRightDown(const std::pair<std::size_t, std::size_t> &po
         }
     }
     return false;
+}
+
+bool PathFinder::isFullyCovered(const std::vector<std::vector<uint8_t>> &bitmap) const {
+    for (size_t i = 0; i < bitmap.size(); i++) {
+        for (size_t j = 0; j < bitmap[i].size(); j++) {
+            if (bitmap[i][j] && (visited_[i][j] != 3)) {
+                return false;
+            }
+        }
+    }
+    return true;
 }
