@@ -24,6 +24,9 @@ PathFinder::operator()(const std::vector<std::vector<uint8_t >> &bitmap) {
         }
     }
 
+    if (path_.empty()) {
+        return std::nullopt;
+    }
     visited_ = bitmap;
     for (auto &i: visited_) {
         for (auto &j: i) {
